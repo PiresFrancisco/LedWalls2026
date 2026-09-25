@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Urbanist', sans-serif;
+      background-color: transparent;
+    }
+
+    /* Preenche os 100% da tela 3x5 no WebDisplays com a imagem wall.png */
+    .widget-container {
+      width: 100vw;
+      height: 100vh;
+      background: url('wall.png') center center / cover no-repeat,
+                  linear-gradient(180deg, #37a7b8 0%, #688a86 35%, #8f6c5b 60%, #e05326 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4vh 5vw;
+    }
+
+    /* Moldura arredondada translúcida */
+    .inner-frame {
+      width: 86%;
+      height: 82%;
+      border: 0.45vh solid rgba(255, 255, 255, 0.95);
+      border-radius: 4vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      padding: 2vh 2vw;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(2px);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .weekday-label {
+      font-size: 2.8vh;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4vw;
+      opacity: 0.95;
+      margin-bottom: 2vh;
+    }
+
+    /* Número do dia em grande destaque */
+    .day-number {
+      font-size: 19vh;
+      font-weight: 600;
+      line-height: 0.88;
+      letter-spacing: -0.4vw;
+      font-variant-numeric: tabular-nums;
+      margin: 1vh 0 2.5vh;
+    }
+
+    /* Mês e Ano */
+    .month-label {
+      font-size: 4.2vh;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.25vw;
+      line-height: 1.1;
+      opacity: 0.95;
+    }
+
+    .year-label {
+      margin-top: 1.2vh;
+      font-size: 2.4vh;
+      font-weight: 400;
+      letter-spacing: 0.2vw;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget-container">
+    <div class="inner-frame">
+      <div class="weekday-label" id="weekday">SEXTA-FEIRA</div>
+      <div class="day-number" id="day">25</div>
+      <div class="month-label" id="month">SETEMBRO</div>
+      <div class="year-label" id="year">2026</div>
+    </div>
+  </div>
+
+  <script>
+    function updateDate() {
+      const now = new Date();
+
+      const days = [
+        'DOMINGO', 'SEGUNDA-FEIRA', 'TERÇA-FEIRA',
+        'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO'
+      ];
+      const months = [
+        'JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO',
+        'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'
+      ];
+
+      document.getElementById('weekday').textContent = days[now.getDay()];
+      document.getElementById('day').textContent = String(now.getDate()).padStart(2, '0');
+      document.getElementById('month').textContent = months[now.getMonth()];
+      document.getElementById('year').textContent = now.getFullYear();
+    }
+
+    updateDate();
+    // Atualiza a cada minuto para virar o dia automaticamente à meia-noite
+    setInterval(updateDate, 60000);
+  </script>
+</body>
+</html>
