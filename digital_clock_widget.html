@@ -6,8 +6,7 @@
   <title>Digital Clock Widget</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -16,152 +15,98 @@
       user-select: none;
     }
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #0d1117;
-      font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-weight: 500;
-      color: #ffffff;
-      padding: 20px;
-    }
-
-    .widget-viewport {
-      width: 352px;
-      height: 608px;
-      position: relative;
+    html, body {
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
-      border-radius: 36px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.1);
-      /* 
-         O fundo abaixo reproduz o degradê da imagem (Turquesa -> Cinzento Suave -> Laranja/Terracota). 
-         Se tiveres a imagem no mesmo diretório, a linha "background-image: url('Frame 29.png')" abaixo carrega a imagem original!
-      */
-      background: 
-        url('Frame 29.png') center / cover no-repeat,
-        linear-gradient(180deg, #3aa7b4 0%, #46abb7 14%, #6c8d8b 38%, #8c7365 58%, #be5834 82%, #ce4920 100%);
+      font-family: 'Urbanist', sans-serif;
+      background-color: transparent;
+    }
+
+    /* O container ocupa exatamente 100% da tela física do WebDisplays */
+    .widget-container {
+      width: 100vw;
+      height: 100vh;
+      background: url('Frame 29.png') center center / cover no-repeat,
+                  linear-gradient(180deg, #37a7b8 0%, #688a86 35%, #8f6c5b 60%, #e05326 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4vh 5vw;
+    }
+
+    /* Moldura arredondada proporcional à tela de 3x5 */
+    .inner-frame {
+      width: 86%;
+      height: 82%;
+      border: 0.45vh solid rgba(255, 255, 255, 0.95);
+      border-radius: 4vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      color: #ffffff;
+      padding: 2vh 2vw;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
-    /* Posicionado e dimensionado exatamente sobre a moldura interior com cantos curvos */
-    .frame-overlay {
-      position: absolute;
-      top: 132px;
-      left: 49px;
-      width: 254px;
-      height: 344px;
-      border: 2px solid rgba(255, 255, 255, 0.85);
-      border-radius: 28px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 18px;
-      backdrop-filter: blur(1.5px);
-      background: rgba(255, 255, 255, 0.03);
-      box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.04);
-      z-index: 2;
-    }
-
-    .day-tag {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
+    .date-label {
+      font-size: 2.4vh;
+      font-weight: 500;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 12px;
-      padding: 3px 12px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(8px);
+      letter-spacing: 0.35vw;
+      opacity: 0.95;
+      margin-bottom: 2vh;
     }
 
-    .time-container {
+    .time-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       line-height: 0.88;
-    }
-
-    .digits {
-      font-size: 78px;
-      font-weight: 500;
-      letter-spacing: -2px;
-      color: #ffffff;
-      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    .time-divider {
-      font-size: 32px;
-      height: 14px;
-      display: flex;
-      align-items: center;
-      opacity: 0.8;
-      margin: 2px 0;
-      animation: pulse 2s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.85; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.92); }
-    }
-
-    .seconds-pill {
-      margin-top: 14px;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.85);
-      background: rgba(0, 0, 0, 0.15);
-      padding: 4px 12px;
-      border-radius: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .seconds-pill span.num {
       font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      color: #ffffff;
+      margin: 1.5vh 0;
     }
 
-    .date-display {
-      margin-top: 18px;
-      font-size: 14px;
+    .time-digits {
+      font-size: 15vh;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      color: rgba(255, 255, 255, 0.95);
-      text-align: center;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      letter-spacing: -0.3vw;
+    }
+
+    .sec-wrapper {
+      margin-top: 1.5vh;
+      font-size: 2.6vh;
+      letter-spacing: 0.15vw;
+      opacity: 0.9;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .full-date {
+      margin-top: 2.5vh;
+      font-size: 2.3vh;
+      font-weight: 400;
+      opacity: 0.95;
+      letter-spacing: 0.08vw;
     }
   </style>
 </head>
 <body>
-
-  <div class="widget-viewport">
-    <div class="frame-overlay">
-      <div id="dayTag" class="day-tag">SEGUNDA-FEIRA</div>
-
-      <div class="time-container">
-        <span id="hours" class="digits">10</span>
-        <span class="time-divider">• •</span>
-        <span id="minutes" class="digits">45</span>
+  <div class="widget-container">
+    <div class="inner-frame">
+      <div class="date-label" id="day-name">SEXTA-FEIRA</div>
+      
+      <div class="time-wrapper">
+        <span class="time-digits" id="hours">23</span>
+        <span class="time-digits" id="minutes">15</span>
       </div>
 
-      <div class="seconds-pill">
-        SEC <span id="seconds" class="num">00</span>
+      <div class="sec-wrapper">
+        <span id="seconds">00</span>s
       </div>
 
-      <div id="dateDisplay" class="date-display">
-        24 de Outubro, 2026
-      </div>
+      <div class="full-date" id="calendar-date">25 de setembro, 2026</div>
     </div>
   </div>
 
@@ -169,7 +114,6 @@
     function updateClock() {
       const now = new Date();
 
-      // Horas, minutos e segundos formatados com dois dígitos
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
       const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -178,27 +122,20 @@
       document.getElementById('minutes').textContent = minutes;
       document.getElementById('seconds').textContent = seconds;
 
-      // Nomes de dias e meses em português
-      const weekDays = [
-        'DOMINGO', 'SEGUNDA-FEIRA', 'TERÇA-FEIRA', 
-        'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO'
-      ];
+      const days = ['DOMINGO', 'SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO'];
+      document.getElementById('day-name').textContent = days[now.getDay()];
 
       const months = [
-        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+        'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
       ];
-
-      const dayName = weekDays[now.getDay()];
-      const dayNum = now.getDate();
-      const monthName = months[now.getMonth()];
+      const day = now.getDate();
+      const month = months[now.getMonth()];
       const year = now.getFullYear();
 
-      document.getElementById('dayTag').textContent = dayName;
-      document.getElementById('dateDisplay').textContent = `${dayNum} de ${monthName}, ${year}`;
+      document.getElementById('calendar-date').textContent = `${day} de ${month}, ${year}`;
     }
 
-    // Inicialização imediata e ciclo de atualização a cada segundo
     updateClock();
     setInterval(updateClock, 1000);
   </script>
